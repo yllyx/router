@@ -1,16 +1,23 @@
-import { HeroDetailComponent } from './hero-detail.component';
-import { HeroListComponent } from './hero-list.component';
-import { Routes, RouterModule } from '@angular/Router';
-import { NgModule } from '@angular/core';
+import { NgModule }             from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { HeroListComponent }    from './hero-list.component';
+import { HeroDetailComponent }  from './hero-detail.component';
 
 const heroesRoutes: Routes = [
-  {path: 'heroes', component: HeroListComponent},
-  {path: 'hero/:id', component: HeroDetailComponent}
+  { path: 'heroes', redirectTo: '/superheroes' },
+  { path: 'hero/:id', redirectTo: '/superhero/:id' },
+  { path: 'superheroes',  component: HeroListComponent },
+  { path: 'superhero/:id', component: HeroDetailComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(heroesRoutes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forChild(heroesRoutes)
+  ],
+  exports: [
+    RouterModule
+  ]
 })
-export class HeroesRoutingModule { }
+export class HeroRoutingModule { }
 

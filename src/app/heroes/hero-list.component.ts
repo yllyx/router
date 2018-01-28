@@ -1,27 +1,42 @@
-import { Hero } from '../hero';
-import { HeroService } from './hero.service';
+// TODO SOMEDAY: Feature Componetized like CrisisCenter
+import 'rxjs/add/operator/switchMap';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+
+import { Hero, HeroService }  from './hero.service';
 
 @Component({
-  templateUrl: './hero-list.component.html',
-  styleUrls: ['./hero-list.component.css']
+  template: `
+    <h2>HEROES</h2>
+    <ul class="items">
+      <li *ngFor="let hero of heroes$ | async"
+        [class.selected]="hero.id === selectedId">
+        <a [routerLink]="['/hero', hero.id]">
+          <span class="badge">{{ hero.id }}</span>{{ hero.name }}
+        </a>
+      </li>
+    </ul>
+
+    <button routerLink="/sidekicks">Go to sidekicks</button>
+  `
 })
 export class HeroListComponent implements OnInit {
-  title = 'Tour of Heroes';
-  heroes: Hero[];
-  selectedHero: Hero;
+  heroes$: Observable<Hero[]>;
 
-  constructor(private heroService: HeroService) { }
+  private selectedId: number;
 
-  getHeroes(): void {
-    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
-  }
+  constructor(
+    private service: HeroService,
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit(): void {
-    this.getHeroes();
-  }
-
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
+  ngOnInit() {
+    this.heroes$ = this.route.paramMap
+      .switchMap((params: ParamMap) => {
+        // (+) before `params.get()` turns the string into a number
+        this.selectedId = +params.get('id');
+        return this.service.getHeroes();
+      });
   }
 }
