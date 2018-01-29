@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-import { Hero, HeroService }  from './hero.service';
+import { Hero, HeroService } from './hero.service';
 
 @Component({
   template: `
@@ -29,7 +29,7 @@ export class HeroListComponent implements OnInit {
   constructor(
     private service: HeroService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.heroes$ = this.route.paramMap
